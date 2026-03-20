@@ -1,0 +1,293 @@
+[
+  {
+    "type": "function",
+    "name": "batchGetBalances",
+    "inputs": [
+      {
+        "name": "user",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "tokens",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct InternalLaunchpadLens.BalanceInfo[]",
+        "components": [
+          {
+            "name": "token",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "symbol",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "balance",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "roundId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isExternalMarket",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "dividendsBNBAccrued",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "totalDividendsBNB",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "nextClaimTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "batchGetTaxInfo",
+    "inputs": [
+      {
+        "name": "launchpads",
+        "type": "address[]",
+        "internalType": "address[]"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct InternalLaunchpadLens.LaunchpadTaxInfo[]",
+        "components": [
+          {
+            "name": "launchpad",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "taxParams",
+            "type": "tuple",
+            "internalType": "struct TaxParams",
+            "components": [
+              {
+                "name": "taxEnabled",
+                "type": "bool",
+                "internalType": "bool"
+              },
+              {
+                "name": "createDividendTracker",
+                "type": "bool",
+                "internalType": "bool"
+              },
+              {
+                "name": "taxRate",
+                "type": "uint256",
+                "internalType": "uint256"
+              },
+              {
+                "name": "marketingShare",
+                "type": "uint256",
+                "internalType": "uint256"
+              },
+              {
+                "name": "burnShare",
+                "type": "uint256",
+                "internalType": "uint256"
+              },
+              {
+                "name": "rewardShare",
+                "type": "uint256",
+                "internalType": "uint256"
+              },
+              {
+                "name": "liquidityShare",
+                "type": "uint256",
+                "internalType": "uint256"
+              },
+              {
+                "name": "marketingWallet",
+                "type": "address",
+                "internalType": "address"
+              },
+              {
+                "name": "minimumTokenBalanceForDividends",
+                "type": "uint256",
+                "internalType": "uint256"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getPlayerState",
+    "inputs": [
+      {
+        "name": "launchpad",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "player",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "s",
+        "type": "tuple",
+        "internalType": "struct InternalLaunchpadLens.PlayerState",
+        "components": [
+          {
+            "name": "keysOwned",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "dividendsBNBAccrued",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "totalDividendsBNB",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "nextClaimTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getRoomState",
+    "inputs": [
+      {
+        "name": "launchpad",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "s",
+        "type": "tuple",
+        "internalType": "struct InternalLaunchpadLens.RoomState",
+        "components": [
+          {
+            "name": "roundId",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "endTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "leader",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "potBNB",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "airdropPot",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "devPot",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "genPot",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "platformPot",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "totalEthIn",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "totalReferralRewards",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "lpBNBAccumulated",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "lpBNBThreshold",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "lpTokenEstimate",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "roundCount",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "isExternalMarket",
+            "type": "bool",
+            "internalType": "bool"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  }
+]

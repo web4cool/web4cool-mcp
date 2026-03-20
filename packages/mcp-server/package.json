@@ -1,0 +1,54 @@
+{
+  "name": "@web4cool/mcp-server",
+  "version": "0.1.0",
+  "description": "MCP Server for Web4cool - room creation, status queries, and token management",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "web4cool-mcp": "dist/index.js"
+  },
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --outfile=dist/index.js --packages=external && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
+    "build:tsc": "tsc -p . && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
+    "start": "node dist/index.js",
+    "init": "node dist/index.js --init",
+    "lint": "xo",
+    "lint:fix": "xo --fix"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "web4cool",
+    "blockchain",
+    "launchpad",
+    "bsc"
+  ],
+  "files": [
+    "dist",
+    "config.example.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.27.1",
+    "bcrypt": "^5.1.1",
+    "chalk": "^5.6.2",
+    "dotenv": "^16.6.1",
+    "ethers": "^6.16.0",
+    "figlet": "^1.11.0",
+    "fs-extra": "^11.3.4",
+    "prompts": "^2.4.2",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "@types/figlet": "^1.7.0",
+    "@types/prompts": "^2.4.9",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.10.0",
+    "typescript": "^5.8.2",
+    "xo": "1.2.3"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "web4cool": {
+      "command": "node",
+      "args": ["/path/to/mcp-server/dist/index.js"],
+      "env": {
+        "WEB4COOL_API_URL": "http://localhost:4000/api/v1",
+        "WEB4COOL_PRIVATE_KEY": "enc:YOUR_ENCRYPTED_PRIVATE_KEY",
+        "WEB4COOL_WALLET_PASSWORD": "YOUR_WALLET_PASSWORD",
+        "WEB4COOL_RPC_URL": "https://data-seed-prebsc-1-s1.binance.org:8545",
+        "WEB4COOL_CHAIN_ID": "97",
+        "WEB4COOL_FACTORY_ADDRESS": "0x...",
+        "WEB4COOL_LENS_ADDRESS": "0x..."
+      }
+    }
+  }
+}
