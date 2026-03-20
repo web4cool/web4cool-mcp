@@ -9,7 +9,7 @@ Usage:
   web4cool-mcp --version    Show version
 
 Environment variables:
-  WEB4COOL_API_URL          Backend API URL (e.g. http://localhost:4000/api/v1)
+  WEB4COOL_API_URL          Backend API URL (default init: https://web4.cool/api/v1)
   WEB4COOL_PRIVATE_KEY      Wallet private key (0x prefix, or enc:base64 for encrypted)
   WEB4COOL_WALLET_PASSWORD  Password for encrypted private key (when using enc: prefix)
 
@@ -20,7 +20,7 @@ Cursor/Claude config example:
         "command": "node",
         "args": ["/path/to/mcp-server/dist/index.js"],
         "env": {
-          "WEB4COOL_API_URL": "http://localhost:4000/api/v1",
+          "WEB4COOL_API_URL": "https://web4.cool/api/v1",
           "WEB4COOL_PRIVATE_KEY": "0x..."
         }
       }

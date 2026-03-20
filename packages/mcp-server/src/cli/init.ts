@@ -17,6 +17,13 @@ const onCancel = () => {
   process.exit(0);
 };
 
+/** Defaults for `npm run init` (BSC testnet factory/lens used on web4.cool). */
+const DEFAULT_WEB4COOL_API_URL = 'https://web4.cool/api/v1';
+const DEFAULT_WEB4COOL_RPC_URL = 'https://data-seed-prebsc-1-s1.binance.org:8545';
+const DEFAULT_WEB4COOL_CHAIN_ID = '97';
+const DEFAULT_WEB4COOL_FACTORY_ADDRESS = '0x3518bB377a56eeE8B3C97ae25D24d8F2b72E0cD3';
+const DEFAULT_WEB4COOL_LENS_ADDRESS = '0x3c02f7C9A315f6507f91ba1eBE3d2C7089343883';
+
 function validatePassword(pwd: string): boolean | string {
   if (pwd.trim() === '') return 'Password is required';
   if (pwd.length < 8 || pwd.length > 128) return 'Password must be 8-128 characters';
@@ -57,8 +64,6 @@ export async function init(): Promise<void> {
     let factoryAddress = process.env.WEB4COOL_FACTORY_ADDRESS?.trim();
     let lensAddress = process.env.WEB4COOL_LENS_ADDRESS?.trim();
 
-    const DEFAULT_RPC = 'https://data-seed-prebsc-1-s1.binance.org:8545';
-    const DEFAULT_CHAIN_ID = '97';
     const missingOptional = !rpcUrl || !chainId;
 
     if (missingOptional && process.stdin.isTTY) {
@@ -69,43 +74,51 @@ export async function init(): Promise<void> {
       );
       const extra = await prompts(
         [
-          {type: 'text', name: 'rpcUrl', message: 'RPC URL:', initial: rpcUrl || DEFAULT_RPC},
+          {type: 'text', name: 'rpcUrl', message: 'RPC URL:', initial: rpcUrl || DEFAULT_WEB4COOL_RPC_URL},
           {
             type: 'text',
             name: 'chainId',
             message: 'Chain ID (56=mainnet, 97=testnet):',
-            initial: chainId || DEFAULT_CHAIN_ID,
+            initial: chainId || DEFAULT_WEB4COOL_CHAIN_ID,
           },
           {
             type: 'text',
             name: 'factoryAddress',
             message: 'Factory address (for create_room, optional):',
-            initial: factoryAddress || '',
+            initial: factoryAddress?.trim() || DEFAULT_WEB4COOL_FACTORY_ADDRESS,
           },
           {
             type: 'text',
             name: 'lensAddress',
             message: 'Lens address (for get_keys_dividend_info, optional):',
-            initial: lensAddress || '',
+            initial: lensAddress?.trim() || DEFAULT_WEB4COOL_LENS_ADDRESS,
           },
         ],
         {onCancel},
       );
-      rpcUrl = String(extra.rpcUrl ?? '').trim() || rpcUrl || DEFAULT_RPC;
-      chainId = String(extra.chainId ?? '').trim() || chainId || DEFAULT_CHAIN_ID;
+      rpcUrl = String(extra.rpcUrl ?? '').trim() || rpcUrl || DEFAULT_WEB4COOL_RPC_URL;
+      chainId = String(extra.chainId ?? '').trim() || chainId || DEFAULT_WEB4COOL_CHAIN_ID;
       factoryAddress = String(extra.factoryAddress ?? '').trim() || factoryAddress;
       lensAddress = String(extra.lensAddress ?? '').trim() || lensAddress;
     } else if (missingOptional) {
-      rpcUrl = rpcUrl || DEFAULT_RPC;
-      chainId = chainId || DEFAULT_CHAIN_ID;
-      lensAddress = lensAddress || process.env.WEB4COOL_LENS_ADDRESS?.trim();
+      rpcUrl = rpcUrl || DEFAULT_WEB4COOL_RPC_URL;
+      chainId = chainId || DEFAULT_WEB4COOL_CHAIN_ID;
+      factoryAddress = factoryAddress?.trim() || DEFAULT_WEB4COOL_FACTORY_ADDRESS;
+      lensAddress = lensAddress?.trim() || process.env.WEB4COOL_LENS_ADDRESS?.trim() || DEFAULT_WEB4COOL_LENS_ADDRESS;
       console.log(
         chalk.yellow(
-          'Non-interactive: using defaults (RPC=testnet, chainId=97).\n' +
+          'Non-interactive: using defaults (RPC=testnet, chainId=97, factory/lens=web4.cool testnet).\n' +
             '  To customize, add before npm run init:\n' +
             '  WEB4COOL_RPC_URL=... WEB4COOL_CHAIN_ID=97 WEB4COOL_FACTORY_ADDRESS=0x... WEB4COOL_LENS_ADDRESS=0x...\n',
         ),
       );
+    }
+
+    if (!factoryAddress?.trim()) {
+      factoryAddress = DEFAULT_WEB4COOL_FACTORY_ADDRESS;
+    }
+    if (!lensAddress?.trim()) {
+      lensAddress = DEFAULT_WEB4COOL_LENS_ADDRESS;
     }
 
     const encValue = privateKey.startsWith('enc:')
@@ -124,7 +137,7 @@ export async function init(): Promise<void> {
     await fs.writeFile('.env', envLines.join('\n') + '\n');
     console.log(chalk.green('✅ .env created'));
 
-    const indexPath = path.resolve(__dirname, '..', 'index.js');
+    const indexPath = path.resolve(__dirname, 'index.js');
     const env: Record<string, string> = {
       WEB4COOL_API_URL: apiUrl,
       WEB4COOL_PRIVATE_KEY: `enc:${encValue}`,
@@ -151,7 +164,7 @@ export async function init(): Promise<void> {
     console.log(
       chalk.yellow(
         'Terminal is non-interactive. Run with env vars instead:\n' +
-          '  WEB4COOL_API_URL=http://localhost:4000/api/v1 \\\n' +
+          `  WEB4COOL_API_URL=${DEFAULT_WEB4COOL_API_URL} \\\n` +
           '  WEB4COOL_PRIVATE_KEY=0xYOUR_KEY \\\n' +
           '  WEB4COOL_WALLET_PASSWORD=your_password \\\n' +
           '  [WEB4COOL_RPC_URL=...] [WEB4COOL_CHAIN_ID=97] [WEB4COOL_FACTORY_ADDRESS=0x...] [WEB4COOL_LENS_ADDRESS=0x...] \\\n' +
@@ -178,32 +191,32 @@ export async function init(): Promise<void> {
     {
       type: 'text',
       name: 'apiUrl',
-      message: 'API URL (e.g. http://localhost:4000/api/v1):',
-      initial: 'http://localhost:4000/api/v1',
+      message: 'API URL:',
+      initial: DEFAULT_WEB4COOL_API_URL,
     },
     {
       type: 'text',
       name: 'rpcUrl',
       message: 'RPC URL (optional, for create_room/buy_keys):',
-      initial: 'https://data-seed-prebsc-1-s1.binance.org:8545',
+      initial: DEFAULT_WEB4COOL_RPC_URL,
     },
     {
       type: 'text',
       name: 'chainId',
       message: 'Chain ID (optional: 56=BSC mainnet, 97=testnet):',
-      initial: '97',
+      initial: DEFAULT_WEB4COOL_CHAIN_ID,
     },
     {
       type: 'text',
       name: 'factoryAddress',
       message: 'Factory address (optional, for create_room):',
-      initial: '',
+      initial: DEFAULT_WEB4COOL_FACTORY_ADDRESS,
     },
     {
       type: 'text',
       name: 'lensAddress',
       message: 'Lens address (optional, for get_keys_dividend_info):',
-      initial: '',
+      initial: DEFAULT_WEB4COOL_LENS_ADDRESS,
     },
   ];
 
@@ -234,7 +247,7 @@ export async function init(): Promise<void> {
   await fs.writeFile('.env', envLines.join('\n') + '\n');
   console.log(chalk.green('✅ .env created'));
 
-  const indexPath = path.resolve(__dirname, '..', 'index.js');
+  const indexPath = path.resolve(__dirname, 'index.js');
   const env: Record<string, string> = {
     WEB4COOL_API_URL: apiUrl,
     WEB4COOL_PRIVATE_KEY: `enc:${encrypted}`,

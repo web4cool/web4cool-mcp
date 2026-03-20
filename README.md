@@ -24,25 +24,39 @@ npm run build
 
   Or use the CLI name after install/link: `web4cool-mcp`.
 
-- **Configuration wizard** (optional): `web4cool-mcp --init` (`-i`) — interactive setup; can merge into Claude Desktop config on macOS/Windows when applicable.
+- **Configuration wizard**: `web4cool-mcp --init` (short: `-i`), or `npm run init` from `packages/mcp-server` after a build. See [Configuration wizard](#configuration-wizard) below.
 
-- **Help / version**: `web4cool-mcp --help`, `web4cool-mcp --version`
+- **Help / version**: `web4cool-mcp --help` (`-h`), `web4cool-mcp --version` (`-v`).
+
+## Configuration wizard
+
+Run interactively in a normal terminal (not a non-TTY environment). The wizard:
+
+1. Asks for a **wallet password** (8–128 characters, with lowercase, uppercase, number, and special character) and **private key**, then encrypts the key as `enc:…` for `.env` / MCP `env`.
+2. Pre-fills **API URL** with `https://web4.cool/api/v1`, and **BSC testnet** defaults for RPC (`https://data-seed-prebsc-1-s1.binance.org:8545`), chain ID `97`, factory, and lens (same defaults as on web4.cool testnet)—you can change any of these.
+3. Writes **`.env`** in the current directory.
+4. On **macOS** or **Windows**, optionally merges the server entry into **Claude Desktop** `claude_desktop_config.json`. If you skip that or are on Linux, it writes **`config.json`** (`mcpServers` snippet) for you to add to Cursor or another client.
+
+**Non-interactive / CI**: set `WEB4COOL_API_URL`, `WEB4COOL_PRIVATE_KEY`, and `WEB4COOL_WALLET_PASSWORD`, then run `npm run init` from `packages/mcp-server`. Missing optional RPC/chain/factory/lens values fall back to the same BSC testnet defaults as above; set `WEB4COOL_RPC_URL`, `WEB4COOL_CHAIN_ID`, `WEB4COOL_FACTORY_ADDRESS`, and `WEB4COOL_LENS_ADDRESS` beforehand to override. This path always writes `.env` and **`config.json`** (no Claude Desktop merge prompt).
+
+Pure non-interactive **without** those three required env vars exits with instructions—use an external terminal or supply the env vars.
 
 ## Environment variables
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `WEB4COOL_API_URL` | Yes | Backend base URL (no trailing slash required), e.g. `http://localhost:4000/api/v1` |
-| `WEB4COOL_PRIVATE_KEY` | Yes | Hex private key (`0x…`) or `enc:…` ciphertext from the init wizard |
+| `WEB4COOL_API_URL` | Yes | Backend base URL (no trailing slash required). Wizard default: `https://web4.cool/api/v1` |
+| `WEB4COOL_PRIVATE_KEY` | Yes | Hex private key (`0x…`) or `enc:…` ciphertext from the wizard |
 | `WEB4COOL_WALLET_PASSWORD` | If key is `enc:` | Password to decrypt the stored key |
-| `WEB4COOL_RPC_URL` | No | BSC JSON-RPC; defaults to public testnet or mainnet RPC from `WEB4COOL_CHAIN_ID` |
-| `WEB4COOL_CHAIN_ID` | No | `97` (BSC testnet, default) or `56` (mainnet) |
-| `WEB4COOL_FACTORY_ADDRESS` | For create room / some dividend flows | Launchpad factory contract |
-| `WEB4COOL_LENS_ADDRESS` | For `get_keys_dividend_info` | Internal launchpad lens contract |
+| `WEB4COOL_RPC_URL` | No | BSC JSON-RPC; wizard defaults to public BSC testnet RPC when chain is testnet |
+| `WEB4COOL_CHAIN_ID` | No | `97` (BSC testnet, wizard default) or `56` (mainnet) |
+| `WEB4COOL_FACTORY_ADDRESS` | For create room / some dividend flows | Launchpad factory contract (wizard pre-fills testnet factory for web4.cool) |
+| `WEB4COOL_LENS_ADDRESS` | For `get_keys_dividend_info` | Internal launchpad lens contract (wizard pre-fills testnet lens for web4.cool) |
 
 ## MCP client configuration
 
-See `packages/mcp-server/config.example.json` for a `mcpServers` snippet. Point `args` at your built `dist/index.js` and set `env` as above.
+- **`config.example.json`** — template `mcpServers` snippet; set `args` to your built `dist/index.js` and `env` as above (example uses a local API URL; the wizard defaults to `https://web4.cool/api/v1`).
+- After **`web4cool-mcp --init`**, use the generated **`config.json`** or the merged Claude Desktop config; `command` is `node` and `args` point at `dist/index.js` inside `packages/mcp-server`.
 
 ## Tools (summary)
 
