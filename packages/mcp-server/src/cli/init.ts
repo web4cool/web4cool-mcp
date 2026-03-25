@@ -21,7 +21,8 @@ const onCancel = () => {
 const DEFAULT_WEB4COOL_API_URL = 'https://web4.cool/api/v1';
 const DEFAULT_WEB4COOL_RPC_URL = 'https://data-seed-prebsc-1-s1.binance.org:8545';
 const DEFAULT_WEB4COOL_CHAIN_ID = '97';
-const DEFAULT_WEB4COOL_FACTORY_ADDRESS = '0x3518bB377a56eeE8B3C97ae25D24d8F2b72E0cD3';
+const DEFAULT_WEB4COOL_FACTORY_ADDRESS =
+  "0x62cAA8d8936Ebe61Dee2d088EA26C8FB1Ac3E62c";
 const DEFAULT_WEB4COOL_LENS_ADDRESS = '0x3c02f7C9A315f6507f91ba1eBE3d2C7089343883';
 
 function validatePassword(pwd: string): boolean | string {
